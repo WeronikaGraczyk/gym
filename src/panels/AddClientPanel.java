@@ -17,6 +17,8 @@ public class AddClientPanel extends JDialog implements ActionListener {
     private final JTextField giveLastName;
     private final JButton addClient;
     Gym gym = null;
+    private JTextField viewinfo;
+    private String info;
 
 
     public AddClientPanel() {
@@ -57,7 +59,6 @@ public class AddClientPanel extends JDialog implements ActionListener {
         }
     }
 
-
     private void matchTheContent() {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int szer = getSize().width;
@@ -67,6 +68,13 @@ public class AddClientPanel extends JDialog implements ActionListener {
         setLocation(loks, lokw);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    public boolean ValidateMethod() {
+        if (getFirstName() == null || getFirstName().length() == 0 || getLastName() == null || getLastName().length() == 0) {
+            return true;
+        }
+        return false;
     }
 
     public String getLastName() {
@@ -79,14 +87,20 @@ public class AddClientPanel extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        ValidateMethod();
         Object zrodlo = e.getSource();
         if (zrodlo == addClient) {
-            dispose();
-            Client client = new Client(getFirstName(), getLastName(), gym.getLastClient().getClientNumber() + 1);
-            gym.add(client);
-
-            System.out.println(gym.getAll());
+            if (!ValidateMethod()) {
+                dispose();
+                Client client = new Client(getFirstName(), getLastName(), gym.getLastClient().getClientNumber() + 1);
+                gym.add(client);
+                info = "Numer klienta to: " + client.getClientNumber();
+                JOptionPane.showMessageDialog(viewinfo, info);
+                System.out.println(gym.getAll());
+            } else {
+                info = "Podano niepoprawne dane ";
+                JOptionPane.showMessageDialog(viewinfo, info);
+            }
         }
     }
 }
