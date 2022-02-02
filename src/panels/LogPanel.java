@@ -12,11 +12,11 @@ import java.util.List;
 
 public class LogPanel extends JDialog implements ActionListener {
     private final JLabel login;
-    private final JLabel haslo;
-    private final JTextField podanyLogin;
-    private final JTextField podanehaslo;
+    private final JLabel password;
+    private final JTextField giveLogin;
+    private final JTextField givePassword;
     private JTextField viewinfo;
-    private final JButton zaloguj;
+    private final JButton logIn;
     private boolean isOk = false;
     private MainPanel mainPanel;
     private LogWorkers logWorkers = null;
@@ -33,24 +33,24 @@ public class LogPanel extends JDialog implements ActionListener {
         login.setBounds(10, 5, 160, 30);
         add(login);
 
-        podanyLogin = new JTextField();
-        podanyLogin.setBounds(10, 30, 160, 20);
-        podanyLogin.setToolTipText("Wpisz login!");
-        add(podanyLogin);
+        giveLogin = new JTextField();
+        giveLogin.setBounds(10, 30, 160, 20);
+        giveLogin.setToolTipText("Wpisz login!");
+        add(giveLogin);
 
-        haslo = new JLabel("Podaj haslo: ", JLabel.CENTER);
-        haslo.setBounds(10, 50, 160, 30);
-        add(haslo);
+        password = new JLabel("Podaj haslo: ", JLabel.CENTER);
+        password.setBounds(10, 50, 160, 30);
+        add(password);
 
-        podanehaslo = new JTextField();
-        podanehaslo.setBounds(10, 75, 160, 20);
-        podanehaslo.setToolTipText("Wpisz haslo!");
-        add(podanehaslo);
+        givePassword = new JTextField();
+        givePassword.setBounds(10, 75, 160, 20);
+        givePassword.setToolTipText("Wpisz haslo!");
+        add(givePassword);
 
-        zaloguj = new JButton("zaloguj");
-        zaloguj.setBounds(10, 130, 160, 30);
-        add(zaloguj);
-        zaloguj.addActionListener(this);
+        logIn = new JButton("zaloguj");
+        logIn.setBounds(10, 130, 160, 30);
+        add(logIn);
+        logIn.addActionListener(this);
 
         try {
             logWorkers = new LogWorkers(
@@ -74,18 +74,18 @@ public class LogPanel extends JDialog implements ActionListener {
     }
 
     public String getLogin() {
-        return podanyLogin.getText();
+        return giveLogin.getText();
     }
 
-    public String getHaslo() {
-        return podanehaslo.getText();
+    public String getPassword() {
+        return givePassword.getText();
     }
 
     public void isOK() {
         List<Workers> list = logWorkers.getAll();
         info = "Błędny login lub hasło";
         for (Workers w : list) {
-            if (w.equals(new Workers(getLogin(), getHaslo()))) {
+            if (w.equals(new Workers(getLogin(), getPassword()))) {
                 isOk = true;
             }
         }
@@ -93,8 +93,8 @@ public class LogPanel extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object zrodlo = e.getSource();
-        if (zrodlo == zaloguj) {
+        Object source = e.getSource();
+        if (source == logIn) {
             isOK();
             if (isOk) {
                 dispose();

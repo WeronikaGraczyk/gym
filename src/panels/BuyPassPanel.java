@@ -20,6 +20,9 @@ public class BuyPassPanel extends JDialog implements ActionListener {
     private boolean isOk = false;
     Gym gym = null;
     private String info;
+    private JTextField viewinfo;
+    private int days;
+    private int index;
 
     public BuyPassPanel() {
         setSize(200, 215);
@@ -50,6 +53,7 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         add(buy);
         buy.addActionListener(this);
 
+
         try {
             gym = new Gym(
                     new ClientRepository("ClientList.dat")
@@ -57,6 +61,7 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         } catch (ValidationException a) {
             System.out.println(a.getMessage());
         }
+
     }
 
     private void matchTheContent() {
@@ -70,25 +75,39 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    public int getDay() {
-        return Integer.parseInt(giveDays.getText());
+    public boolean ValidateMethod() {
+        String text = giveDays.getText();
+        if (text.length() != 0 && text.matches("\\d+")) {
+            days = Integer.parseInt(text);
+        }
+        String text1 = giveUniqueNumber.getText();
+        if (text1.length() != 0 && text1.matches("\\d+")) {
+            index = Integer.parseInt(text1);
+            return index > 0 && days > 0;
+        }
+        return false;
     }
 
-    public int getUniqueNumber() {
-        return Integer.parseInt(giveUniqueNumber.getText());
+    public int getDays() {
+        return days;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public void isOK() {
         List<Client> list = gym.getAll();
         info = "Nie ma takiego numeru karty";
         for (Client c : list) {
-            if (getUniqueNumber() == c.getClientNumber()) {
-                System.out.println(gym.getOne(c.getClientNumber()).getDays());
+            if (getIndex() == c.getClientNumber()) {
                 if (gym.getOne(c.getClientNumber()).getDays() != -1) {
                     info = "Karnet jest juz zakupiony";
+                } else if (getDays() == 0) {
+                    info = "Zła liczba dni";
                 } else {
                     isOk = true;
-                    gym.getOne(getUniqueNumber()).setDays(getDay());
+                    gym.getOne(getIndex()).setDays(getDays());
                     Client client = new Client(c.getFirstName(), c.getSecondName(), c.getClientNumber());
                     gym.update(c.getClientNumber(), client);
                     info = "";
@@ -101,11 +120,19 @@ public class BuyPassPanel extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object zrodlo = e.getSource();
         if (zrodlo == buy) {
-            isOK();
-            if (isOk) {
-                dispose();
-                System.out.println(gym.getAll());
-            } else {
+            if (!ValidateMethod()) {
+                String info1 = "Podano błędne dane!";
+                JOptionPane.showMessageDialog(viewinfo, info1);
+            } else if (ValidateMethod()) {
+                isOK();
+                if (isOk) {
+                    dispose();
+                    int i = gym.getOne(getIndex()).getCost();
+                    String info1 = "Zakupiono karnet, cena to: " + i + "zł";
+                    JOptionPane.showMessageDialog(viewinfo, info1);
+                } else {
+                    JOptionPane.showMessageDialog(viewinfo, info);
+                }
             }
         }
     }

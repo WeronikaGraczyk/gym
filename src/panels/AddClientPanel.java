@@ -96,7 +96,6 @@ public class AddClientPanel extends JDialog implements ActionListener {
                 gym.add(client);
                 info = "Numer klienta to: " + client.getClientNumber();
                 JOptionPane.showMessageDialog(viewinfo, info);
-                System.out.println(gym.getAll());
             } else {
                 info = "Podano niepoprawne dane ";
                 JOptionPane.showMessageDialog(viewinfo, info);

@@ -6,10 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainPanel extends JDialog implements ActionListener {
-    private final JButton dodajKlienta;
-    private final JButton wykupKarnet;
-    private final JButton zakupDiety;
-    private final JButton administrowanieAplikacja;
+    private final JButton addClient;
+    private final JButton buyPass;
+    private final JButton clientList;
+    private final JButton buyDiet;
 
     public MainPanel() {
         setSize(615, 500);
@@ -17,29 +17,27 @@ public class MainPanel extends JDialog implements ActionListener {
 
         matchTheContent();
 
-        dodajKlienta = new JButton("Dodaj Klienta");
-        dodajKlienta.setBounds(60, 40, 160, 160);
-        add(dodajKlienta);
-        dodajKlienta.addActionListener(this);
+        addClient = new JButton("Dodaj Klienta");
+        addClient.setBounds(60, 40, 160, 160);
+        add(addClient);
+        addClient.addActionListener(this);
 
-        wykupKarnet = new JButton("Wykup karnet");
-        wykupKarnet.setBounds(360, 40, 160, 160);
-        add(wykupKarnet);
-        wykupKarnet.addActionListener(this);
+        buyPass = new JButton("Wykup karnet");
+        buyPass.setBounds(360, 40, 160, 160);
+        add(buyPass);
+        buyPass.addActionListener(this);
 
-        zakupDiety = new JButton("Zakup diety");
-        zakupDiety.setToolTipText(" w budowie");
-        zakupDiety.setBackground(Color.LIGHT_GRAY);
-        zakupDiety.setBounds(60, 250, 160, 160);
-        add(zakupDiety);
-        zakupDiety.addActionListener(this);
+        clientList = new JButton("Lista klientów");
+        clientList.setBounds(60, 250, 160, 160);
+        add(clientList);
+        clientList.addActionListener(this);
 
-        administrowanieAplikacja = new JButton("Zarządzanie aplikacją");
-        administrowanieAplikacja.setToolTipText(" w budowie");
-        administrowanieAplikacja.setBackground(Color.LIGHT_GRAY);
-        administrowanieAplikacja.setBounds(360, 250, 160, 160);
-        add(administrowanieAplikacja);
-        administrowanieAplikacja.addActionListener(this);
+        buyDiet = new JButton("Zarządzanie aplikacją");
+        buyDiet.setToolTipText(" w budowie");
+        buyDiet.setBackground(Color.LIGHT_GRAY);
+        buyDiet.setBounds(360, 250, 160, 160);
+        add(buyDiet);
+        buyDiet.addActionListener(this);
     }
 
     private void matchTheContent() {
@@ -51,15 +49,18 @@ public class MainPanel extends JDialog implements ActionListener {
         setLocation(loks, lokw);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object zrodlo = e.getSource();
-        if (zrodlo == dodajKlienta) {
+        Object source = e.getSource();
+        if (source == addClient) {
             AddClientPanel client = new AddClientPanel();
-        } else if (zrodlo == wykupKarnet) {
+        } else if (source == buyPass) {
             BuyPassPanel buy = new BuyPassPanel();
+        } else if (source == clientList) {
+            ClientListPanel panel = new ClientListPanel();
         }
     }
 }
