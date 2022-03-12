@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class Workers implements Comparable<Workers>, Serializable {
     private String login;
-    private String haslo;
+    private int haslo;
 
     public Workers(String login, String haslo) {
         this.login = login;
-        this.haslo = haslo;
+        this.haslo = haslo.hashCode();
     }
 
     public String getLogin() {

@@ -1,4 +1,5 @@
 package panels;
+
 import modules.LogWorkers;
 import person.Workers;
 import repository.WorkerRepository;
@@ -8,13 +9,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
-public class LogPanel extends JDialog implements ActionListener {
+public class LogPanel extends JDialog implements ActionListener{
     private final JLabel login;
     private final JLabel password;
     private final JTextField giveLogin;
-    private final JTextField givePassword;
+    private final JPasswordField givePassword;
     private JTextField viewinfo;
     private final JButton logIn;
     private boolean isOk = false;
@@ -37,28 +40,31 @@ public class LogPanel extends JDialog implements ActionListener {
         giveLogin.setBounds(10, 30, 160, 20);
         giveLogin.setToolTipText("Wpisz login!");
         add(giveLogin);
+        addKey(giveLogin);
 
         password = new JLabel("Podaj haslo: ", JLabel.CENTER);
         password.setBounds(10, 50, 160, 30);
         add(password);
 
-        givePassword = new JTextField();
+        givePassword = new JPasswordField();
         givePassword.setBounds(10, 75, 160, 20);
         givePassword.setToolTipText("Wpisz haslo!");
         add(givePassword);
+        addKey(givePassword);
 
         logIn = new JButton("zaloguj");
         logIn.setBounds(10, 130, 160, 30);
         add(logIn);
         logIn.addActionListener(this);
-
         try {
             logWorkers = new LogWorkers(
                     new WorkerRepository("WorkersList.dat")
+
             );
         } catch (ValidationException a) {
             System.out.println(a.getMessage());
         }
+        //       logWorkers.add(new Workers("admin","admin"));
     }
 
     private void matchTheContent() {
@@ -73,15 +79,15 @@ public class LogPanel extends JDialog implements ActionListener {
 
     }
 
-    public String getLogin() {
+    private String getLogin() {
         return giveLogin.getText();
     }
 
-    public String getPassword() {
-        return givePassword.getText();
+    private String getPassword() {
+        return String.valueOf(givePassword.getPassword());
     }
 
-    public void isOK() {
+    private void isOK() {
         List<Workers> list = logWorkers.getAll();
         info = "Błędny login lub hasło";
         for (Workers w : list) {
@@ -99,9 +105,36 @@ public class LogPanel extends JDialog implements ActionListener {
             if (isOk) {
                 dispose();
                 mainPanel = new MainPanel();
-            }else{
-                JOptionPane.showMessageDialog(viewinfo,"Błędne dane logowania");
+            } else {
+                JOptionPane.showMessageDialog(viewinfo, "Błędne dane logowania");
             }
         }
+    }
+
+    private void addKey(JTextField jTextField) {
+        jTextField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    isOK();
+                    if (isOk) {
+                        dispose();
+                        mainPanel = new MainPanel();
+                    } else {
+                        JOptionPane.showMessageDialog(viewinfo, "Błędne dane logowania");
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 }

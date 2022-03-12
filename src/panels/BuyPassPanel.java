@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 public class BuyPassPanel extends JDialog implements ActionListener {
@@ -38,6 +40,7 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         giveUniqueNumber.setBounds(10, 35, 160, 20);
         giveUniqueNumber.setToolTipText("Wpisz numer!");
         add(giveUniqueNumber);
+        addKey(giveUniqueNumber);
 
         howMuchDays = new JLabel("Podaj ilosc dni:", JLabel.CENTER);
         howMuchDays.setBounds(10, 65, 160, 30);
@@ -47,6 +50,7 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         giveDays.setBounds(10, 95, 160, 20);
         giveDays.setToolTipText("Wpisz ilosc dni!");
         add(giveDays);
+        addKey(giveDays);
 
         buy = new JButton("zakup");
         buy.setBounds(10, 130, 160, 30);
@@ -75,7 +79,7 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    public boolean ValidateMethod() {
+    private boolean ValidateMethod() {
         String text = giveDays.getText();
         if (text.length() != 0 && text.matches("\\d+")) {
             days = Integer.parseInt(text);
@@ -88,15 +92,15 @@ public class BuyPassPanel extends JDialog implements ActionListener {
         return false;
     }
 
-    public int getDays() {
+    private int getDays() {
         return days;
     }
 
-    public int getIndex() {
+    private int getIndex() {
         return index;
     }
 
-    public void isOK() {
+    private void isOK() {
         List<Client> list = gym.getAll();
         info = "Nie ma takiego numeru karty";
         for (Client c : list) {
@@ -135,5 +139,37 @@ public class BuyPassPanel extends JDialog implements ActionListener {
                 }
             }
         }
+    }
+
+    private void addKey(JTextField jTextField) {
+        jTextField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (!ValidateMethod()) {
+                        String info1 = "Podano błędne dane!";
+                        JOptionPane.showMessageDialog(viewinfo, info1);
+                    } else if (ValidateMethod()) {
+                        isOK();
+                        if (isOk) {
+                            dispose();
+                            int i = gym.getOne(getIndex()).getCost();
+                            String info1 = "Zakupiono karnet, cena to: " + i + "zł";
+                            JOptionPane.showMessageDialog(viewinfo, info1);
+                        } else {
+                            JOptionPane.showMessageDialog(viewinfo, info);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
     }
 }

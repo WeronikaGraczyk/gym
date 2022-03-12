@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class AddClientPanel extends JDialog implements ActionListener {
     private final JLabel firstName;
@@ -35,6 +37,7 @@ public class AddClientPanel extends JDialog implements ActionListener {
         giveFirstName.setBounds(10, 35, 160, 20);
         giveFirstName.setToolTipText("Wpisz imie!");
         add(giveFirstName);
+        addKey(giveFirstName);
 
         lastName = new JLabel("Podaj nazwisko:", JLabel.CENTER);
         lastName.setBounds(10, 65, 160, 30);
@@ -44,6 +47,7 @@ public class AddClientPanel extends JDialog implements ActionListener {
         giveLastName.setBounds(10, 95, 160, 20);
         giveLastName.setToolTipText("Wpisz nazwisko!");
         add(giveLastName);
+        addKey(giveLastName);
 
         addClient = new JButton("Dodaj klienta");
         addClient.setBounds(10, 130, 160, 30);
@@ -70,18 +74,18 @@ public class AddClientPanel extends JDialog implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    public boolean ValidateMethod() {
+    private boolean ValidateMethod() {
         if (getFirstName() == null || getFirstName().length() == 0 || getLastName() == null || getLastName().length() == 0) {
             return true;
         }
         return false;
     }
 
-    public String getLastName() {
+    private String getLastName() {
         return giveLastName.getText();
     }
 
-    public String getFirstName() {
+    private String getFirstName() {
         return giveFirstName.getText();
     }
 
@@ -101,5 +105,35 @@ public class AddClientPanel extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(viewinfo, info);
             }
         }
+    }
+
+    private void addKey(JTextField jTextField) {
+        jTextField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (!ValidateMethod()) {
+                        dispose();
+                        Client client = new Client(getFirstName(), getLastName(), gym.getLastClient().getClientNumber() + 1);
+                        gym.add(client);
+                        info = "Numer klienta to: " + client.getClientNumber();
+                        JOptionPane.showMessageDialog(viewinfo, info);
+                    } else {
+                        info = "Podano niepoprawne dane ";
+                        JOptionPane.showMessageDialog(viewinfo, info);
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 }
