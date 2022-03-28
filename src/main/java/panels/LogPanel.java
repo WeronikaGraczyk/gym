@@ -19,62 +19,58 @@ public class LogPanel extends JDialog implements ActionListener{
     private final JTextField giveLogin;
     private final JPasswordField givePassword;
     private JTextField viewinfo;
-    private final JButton logIn;
+    private final JButton logInButton;
     private boolean isOk = false;
     private MainPanel mainPanel;
     private LogWorkers logWorkers = null;
     private String info;
 
     public LogPanel() {
-        matchTheContent();
+        JPanel newPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(15, 15, 15, 15);
 
-        login = new JLabel("Podaj login: ", JLabel.CENTER);
-        login.setBounds(10, 5, 160, 30);
-        add(login);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
 
-        giveLogin = new JTextField();
-        giveLogin.setBounds(10, 30, 160, 20);
+        login = new JLabel("Podaj login: ");
+        login.setSize(160, 30);
+        newPanel.add(login, constraints);
+
+        constraints.gridx = 1;
+        giveLogin = new JTextField(20);
         giveLogin.setToolTipText("Wpisz login!");
-        add(giveLogin);
+        newPanel.add(giveLogin, constraints);
         addKey(giveLogin);
 
+        constraints.gridx = 0;
+        constraints.gridy = 1;
         password = new JLabel("Podaj haslo: ", JLabel.CENTER);
-        password.setBounds(10, 50, 160, 30);
-        add(password);
+        password.setSize(160, 30);
+        newPanel.add(password, constraints);
 
-        givePassword = new JPasswordField();
-        givePassword.setBounds(10, 75, 160, 20);
+        constraints.gridx = 1;
+        givePassword = new JPasswordField(20);
         givePassword.setToolTipText("Wpisz haslo!");
-        add(givePassword);
+        newPanel.add(givePassword, constraints);
         addKey(givePassword);
 
-        logIn = new JButton("zaloguj");
-        logIn.setBounds(10, 110, 160, 50);
-        add(logIn);
-        logIn.addActionListener(this);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        logInButton= new JButton("Zaloguj");
+        logInButton.addActionListener(this);
+        newPanel.add(logInButton, constraints);
 
-        try {
-            logWorkers = new LogWorkers(
-                    new WorkerRepository("WorkersList.dat")
+        add(newPanel);
 
-            );
-        } catch (ValidationException a) {
-            System.out.println(a.getMessage());
-        }
-        //       logWorkers.add(new Workers("admin","admin"));
-    }
-
-    private void matchTheContent() {
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        int szer = getSize().width;
-        int wys = getSize().height;
-        int loks = (dim.width - szer) / 2;
-        int lokw = (dim.height - wys) / 2;
-        setLocation(loks, lokw);
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(200, 215);
-        setLayout(null);
+        repoInitial();
+
     }
 
     private String getLogin() {
@@ -85,6 +81,15 @@ public class LogPanel extends JDialog implements ActionListener{
         return String.valueOf(givePassword.getPassword());
     }
 
+    public void repoInitial() {
+        try {
+            logWorkers = new LogWorkers(
+                    new WorkerRepository("WorkersList.dat")
+            );
+        } catch (ValidationException a) {
+            System.out.println(a.getMessage());
+        }
+    }
     private void isOK() {
         List<Workers> list = logWorkers.getAll();
         info = "Błędny login lub hasło";
@@ -98,7 +103,7 @@ public class LogPanel extends JDialog implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source == logIn) {
+        if (source == logInButton) {
             isOK();
             if (isOk) {
                 dispose();
