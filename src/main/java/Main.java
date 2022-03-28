@@ -1,3 +1,4 @@
+import panels.AddNewWorker;
 import panels.LogPanel;
 
 import java.awt.*;

@@ -26,10 +26,6 @@ public class LogPanel extends JDialog implements ActionListener{
     private String info;
 
     public LogPanel() {
-
-        setSize(200, 215);
-        setLayout(null);
-
         matchTheContent();
 
         login = new JLabel("Podaj login: ", JLabel.CENTER);
@@ -53,9 +49,10 @@ public class LogPanel extends JDialog implements ActionListener{
         addKey(givePassword);
 
         logIn = new JButton("zaloguj");
-        logIn.setBounds(10, 130, 160, 30);
+        logIn.setBounds(10, 110, 160, 50);
         add(logIn);
         logIn.addActionListener(this);
+
         try {
             logWorkers = new LogWorkers(
                     new WorkerRepository("WorkersList.dat")
@@ -76,7 +73,8 @@ public class LogPanel extends JDialog implements ActionListener{
         setLocation(loks, lokw);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        setSize(200, 215);
+        setLayout(null);
     }
 
     private String getLogin() {

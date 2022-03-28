@@ -9,7 +9,7 @@ public class MainPanel extends JDialog implements ActionListener {
     private final JButton addClient;
     private final JButton buyPass;
     private final JButton clientList;
-    private final JButton buyDiet;
+    private final JButton appManagement;
 
     public MainPanel() {
         setSize(615, 500);
@@ -32,12 +32,12 @@ public class MainPanel extends JDialog implements ActionListener {
         add(clientList);
         clientList.addActionListener(this);
 
-        buyDiet = new JButton("Zarządzanie aplikacją");
-        buyDiet.setToolTipText(" w budowie");
-        buyDiet.setBackground(Color.LIGHT_GRAY);
-        buyDiet.setBounds(360, 250, 160, 160);
-        add(buyDiet);
-        buyDiet.addActionListener(this);
+        appManagement = new JButton("Zarządzanie aplikacją");
+        appManagement.setToolTipText(" w budowie");
+        appManagement.setBackground(Color.LIGHT_GRAY);
+        appManagement.setBounds(360, 250, 160, 160);
+        add(appManagement);
+        appManagement.addActionListener(this);
     }
 
     private void matchTheContent() {
@@ -49,7 +49,6 @@ public class MainPanel extends JDialog implements ActionListener {
         setLocation(loks, lokw);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
     }
 
     @Override
@@ -61,6 +60,8 @@ public class MainPanel extends JDialog implements ActionListener {
             BuyPassPanel buy = new BuyPassPanel();
         } else if (source == clientList) {
             ClientListPanel panel = new ClientListPanel();
+        }else if(source==appManagement){
+            LogPanel log=new LogPanel();
         }
     }
 }
