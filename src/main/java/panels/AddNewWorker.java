@@ -63,6 +63,7 @@ public class AddNewWorker extends JDialog implements ActionListener {
         confirmPassword.setSize(160, 30);
         newPanel.add(confirmPassword, constraints);
 
+
         constraints.gridx = 1;
         giveConfirmPassword = new JPasswordField(20);
         newPanel.add(giveConfirmPassword, constraints);

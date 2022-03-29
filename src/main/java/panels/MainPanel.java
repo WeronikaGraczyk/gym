@@ -13,7 +13,7 @@ public class MainPanel extends JDialog implements ActionListener {
 
     public MainPanel() {
         setSize(615, 500);
-        setLayout(null);
+        setLayout(new GridLayout(2,2));
 
         matchTheContent();
 
@@ -33,8 +33,6 @@ public class MainPanel extends JDialog implements ActionListener {
         clientList.addActionListener(this);
 
         appManagement = new JButton("Zarządzanie aplikacją");
-        appManagement.setToolTipText(" w budowie");
-        appManagement.setBackground(Color.LIGHT_GRAY);
         appManagement.setBounds(360, 250, 160, 160);
         add(appManagement);
         appManagement.addActionListener(this);
@@ -61,7 +59,7 @@ public class MainPanel extends JDialog implements ActionListener {
         } else if (source == clientList) {
             ClientListPanel panel = new ClientListPanel();
         }else if(source==appManagement){
-            LogPanel log=new LogPanel();
+            ManagementPanel m=new ManagementPanel();
         }
     }
 }
