@@ -1,7 +1,7 @@
 # gym
 
 General info:
-This project is simple for the gym company. All the time under development.
+This is the simple project for the gym company. All the time under development.
 
 Technologies:
 -java
